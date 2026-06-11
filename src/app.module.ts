@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BcryptModule } from './bcrypt/bcrypt.module';
     }),
     UserModule,
     BcryptModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
