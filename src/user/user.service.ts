@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HashingService } from 'src/bcrypt/hashing.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { ResponseUserDto } from 'src/user/dto/response-user.dto';
+import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -53,5 +54,33 @@ export class UserService {
     await this.userRepository.save(user);
     const responseUser = new ResponseUserDto(user);
     return responseUser;
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BadRequestException('Usuario nao encontrado!');
+    }
+
+    if (updateUserDto.password) {
+      const passwordHash = await this.hashingService.hash(
+        updateUserDto.password,
+      );
+      updateUserDto.password = passwordHash;
+    }
+
+    const updatedUser = this.userRepository.merge(user, updateUserDto);
+    await this.userRepository.save(updatedUser);
+    const responseUser = new ResponseUserDto(updatedUser);
+    return responseUser;
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BadRequestException('Usuario nao encontrado!');
+    }
+
+    await this.userRepository.delete(id);
   }
 }
