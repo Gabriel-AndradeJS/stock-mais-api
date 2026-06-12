@@ -11,15 +11,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Role } from 'src/common/decorators/role.decorator';
+import { RoleGuard } from 'src/common/guards/role.guard';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 import { UserService } from 'src/user/user.service';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Role('admin')
   @Get()
   GetAll(@Query('page') page = 1, @Query('limit') limit = 10) {
     return this.userService.GetAll(page, limit);
@@ -30,11 +33,13 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
+  @Role('admin')
   @Patch(':id')
   Update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(id, updateUserDto);
   }
 
+  @Role('admin')
   @Delete(':id')
   @HttpCode(204)
   Delete(@Param('id') id: number) {
