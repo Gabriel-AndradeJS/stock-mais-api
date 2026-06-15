@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { JwtModule } from './jwt/jwt.module';
     BcryptModule,
     AuthModule,
     JwtModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
