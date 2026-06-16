@@ -3,6 +3,6 @@ export class CreateProductDto {
   purchasePrice: number;
   salePrice: number;
   quantity: number;
-  codigoQr: string;
+  barcode: string;
   userId: number;
 }
