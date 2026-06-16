@@ -26,8 +26,8 @@ export class Product {
   @Column()
   quantity: number;
 
-  @Column('')
-  codigoQr: string;
+  @Column()
+  barcode: string;
 
   @CreateDateColumn()
   createdAt: Date;
