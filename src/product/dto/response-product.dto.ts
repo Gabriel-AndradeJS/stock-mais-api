@@ -20,6 +20,5 @@ export class ResponseProductDto {
     this.barcode = user.barcode;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
-    this.userId = user.userId;
   }
 }
