@@ -6,7 +6,7 @@ export class ResponseProductDto {
   purchasePrice: number;
   salePrice: number;
   quantity: number;
-  codigoQr: string;
+  barcode: string;
   createdAt: Date;
   updatedAt: Date;
   userId: number;
@@ -17,7 +17,7 @@ export class ResponseProductDto {
     this.purchasePrice = user.purchasePrice;
     this.salePrice = user.salePrice;
     this.quantity = user.quantity;
-    this.codigoQr = user.codigoQr;
+    this.barcode = user.barcode;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
     this.userId = user.userId;
