@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -26,6 +27,7 @@ export class Product {
   @Column()
   quantity: number;
 
+  @Unique(['barcode'])
   @Column()
   barcode: string;
 
