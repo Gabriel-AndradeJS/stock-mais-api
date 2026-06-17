@@ -29,6 +29,9 @@ export class MechanicalReview {
   @Column()
   status: MechanicalStatus;
 
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  valueService: number;
+
   @OneToMany(() => Product, (product) => product.mechanicalReview, {
     cascade: ['insert', 'update'],
   })
