@@ -99,4 +99,8 @@ export class ProductService {
 
     await this.productRepository.remove(product);
   }
+
+  async findById(id: number) {
+    return this.productRepository.findOne({ where: { id } });
+  }
 }
