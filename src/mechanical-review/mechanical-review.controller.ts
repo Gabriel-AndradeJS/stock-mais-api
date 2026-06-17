@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CreateMechanicalDto } from 'src/mechanical-review/dto/create-mechanical';
 import { UpdateMechanicalDto } from 'src/mechanical-review/dto/update-mechanical';
@@ -48,5 +49,13 @@ export class MechanicalReviewController {
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.mechanicalReviewService.deleteMechanicalReview(id);
+  }
+
+  @Delete(':id/product/:productId')
+  removeProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.mechanicalReviewService.removeProductFromReview(id, productId);
   }
 }
