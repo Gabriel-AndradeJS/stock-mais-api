@@ -34,6 +34,7 @@ export class MechanicalReviewService {
     mechanicalReview: MechanicalReview,
     productsUsed: ProductUsedDto[] | undefined,
     productRepository: Repository<Product>,
+    isUpdate: boolean = false,
   ) {
     if (!productsUsed?.length) {
       return mechanicalReview.productsUsed ?? [];
@@ -66,8 +67,8 @@ export class MechanicalReviewService {
       );
     }
 
-    for (const [productId, usedQuantity] of groupedProducts) {
-      if (usedQuantity <= 0) {
+    for (const [productId, newUsedQuantity] of groupedProducts) {
+      if (newUsedQuantity <= 0) {
         throw new BadRequestException(
           `Quantidade inválida para o produto: ${productId}`,
         );
@@ -79,7 +80,15 @@ export class MechanicalReviewService {
         continue;
       }
 
-      const nextQuantity = product.quantity - usedQuantity;
+      const reviewProduct = reviewProductsById.get(productId);
+      const previousUsedQuantity = reviewProduct?.quantityUsed ?? 0;
+
+      // Calcula a diferença entre a nova quantidade e a anterior
+      const quantityDifference = isUpdate
+        ? newUsedQuantity - previousUsedQuantity
+        : newUsedQuantity;
+
+      const nextQuantity = product.quantity - quantityDifference;
 
       if (nextQuantity < 0) {
         throw new BadRequestException(
@@ -89,20 +98,16 @@ export class MechanicalReviewService {
 
       product.quantity = nextQuantity;
       product.mechanicalReview = mechanicalReview;
-
-      const reviewProduct = reviewProductsById.get(productId);
-      const currentUsedQuantity = reviewProduct?.quantityUsed ?? 0;
-
-      product.quantityUsed = currentUsedQuantity + usedQuantity;
+      product.quantityUsed = newUsedQuantity;
 
       await productRepository.save(product);
 
       if (reviewProduct) {
-        reviewProduct.quantityUsed = currentUsedQuantity + usedQuantity;
+        reviewProduct.quantityUsed = newUsedQuantity;
       } else {
         reviewProductsById.set(productId, {
           ...product,
-          quantityUsed: usedQuantity,
+          quantityUsed: newUsedQuantity,
         });
       }
     }
@@ -206,6 +211,7 @@ export class MechanicalReviewService {
             mechanicalReview,
             productsUsed,
             productRepository,
+            true,
           );
 
           return {
