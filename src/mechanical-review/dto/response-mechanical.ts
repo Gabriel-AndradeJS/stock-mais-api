@@ -5,6 +5,7 @@ export class ResponseMechanicalDto {
   id: number;
   description?: string;
   status: MechanicalStatus;
+  valueService: number;
   titular?: string;
   placa?: string;
   mechanic?: string;
@@ -23,13 +24,15 @@ export class ResponseMechanicalDto {
   constructor(mechanicalReview: MechanicalReview) {
     this.id = mechanicalReview.id;
     this.userId = mechanicalReview.userId;
+    this.valueService = Number(mechanicalReview.valueService ?? 0);
     this.productsUsed = mechanicalReview.productsUsed ?? [];
-    this.total = this.productsUsed.reduce((sum, product) => {
+    const productsTotal = this.productsUsed.reduce((sum, product) => {
       const salePrice = Number(product.salePrice ?? 0);
       const quantityUsed = Number(product.quantityUsed ?? 0);
 
       return sum + salePrice * quantityUsed;
     }, 0);
+    this.total = productsTotal + this.valueService;
     this.status = mechanicalReview.status;
     this.createdAt = mechanicalReview.createdAt;
     this.updatedAt = mechanicalReview.updatedAt;
