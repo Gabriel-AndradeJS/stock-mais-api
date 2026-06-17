@@ -7,13 +7,16 @@ import {
   ValidateNested,
   IsNumber,
 } from 'class-validator';
-import { MechanicalStatus } from 'src/common/types/mechanical-status';
 import { Type } from 'class-transformer';
+import { MechanicalStatus } from 'src/common/types/mechanical-status';
 import { ProductUsedDto } from 'src/mechanical-review/dto/product-used.dto';
 
 export class CreateMechanicalDto {
   @IsOptional()
   description: string;
+
+  @IsNumber()
+  valueService: number;
 
   @IsEnum(MechanicalStatus)
   status: MechanicalStatus;
