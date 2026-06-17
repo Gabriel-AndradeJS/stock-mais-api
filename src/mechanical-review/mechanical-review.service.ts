@@ -30,6 +30,19 @@ export class MechanicalReviewService {
     return groupedProducts;
   }
 
+  async getMechanicalReviewById(id: number) {
+    const review = await this.mechanicalReviewRepository.findOne({
+      where: { id },
+      relations: ['productsUsed'],
+    });
+
+    if (!review) {
+      throw new BadRequestException('Revisão mecânica não encontrada');
+    }
+
+    return new ResponseMechanicalDto(review);
+  }
+
   private async applyProductsUsed(
     mechanicalReview: MechanicalReview,
     productsUsed: ProductUsedDto[] | undefined,
@@ -83,7 +96,6 @@ export class MechanicalReviewService {
       const reviewProduct = reviewProductsById.get(productId);
       const previousUsedQuantity = reviewProduct?.quantityUsed ?? 0;
 
-      // Calcula a diferença entre a nova quantidade e a anterior
       const quantityDifference = isUpdate
         ? newUsedQuantity - previousUsedQuantity
         : newUsedQuantity;
