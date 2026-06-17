@@ -1,3 +1,4 @@
+import { MechanicalReview } from 'src/mechanical-review/entities/mechanical-review.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -27,6 +28,9 @@ export class Product {
   @Column()
   quantity: number;
 
+  @Column({ nullable: true, default: 0 })
+  quantityUsed: number;
+
   @Unique(['barcode'])
   @Column()
   barcode: string;
@@ -43,4 +47,15 @@ export class Product {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @ManyToOne(
+    () => MechanicalReview,
+    (mechanicalReview) => mechanicalReview.productsUsed,
+    {
+      onDelete: 'SET NULL',
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'mechanicalReviewId' })
+  mechanicalReview: MechanicalReview;
 }
