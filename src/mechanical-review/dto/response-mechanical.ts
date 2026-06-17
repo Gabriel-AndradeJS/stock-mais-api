@@ -16,13 +16,20 @@ export class ResponseMechanicalDto {
     quantityUsed: number;
     barcode: string;
   }[];
+  total: number;
   createdAt: Date;
   updatedAt: Date;
 
   constructor(mechanicalReview: MechanicalReview) {
     this.id = mechanicalReview.id;
     this.userId = mechanicalReview.userId;
-    this.productsUsed = mechanicalReview.productsUsed;
+    this.productsUsed = mechanicalReview.productsUsed ?? [];
+    this.total = this.productsUsed.reduce((sum, product) => {
+      const salePrice = Number(product.salePrice ?? 0);
+      const quantityUsed = Number(product.quantityUsed ?? 0);
+
+      return sum + salePrice * quantityUsed;
+    }, 0);
     this.status = mechanicalReview.status;
     this.createdAt = mechanicalReview.createdAt;
     this.updatedAt = mechanicalReview.updatedAt;
