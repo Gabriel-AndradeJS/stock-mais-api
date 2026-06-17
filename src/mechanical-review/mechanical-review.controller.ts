@@ -24,6 +24,11 @@ export class MechanicalReviewController {
     return this.mechanicalReviewService.getAllMechanicalReviews(req);
   }
 
+  @Get(':id')
+  getById(@Param('id') id: number) {
+    return this.mechanicalReviewService.getMechanicalReviewById(id);
+  }
+
   @Post()
   create(
     @Req() req: Request,
