@@ -239,4 +239,62 @@ export class MechanicalReviewService {
 
     await this.mechanicalReviewRepository.remove(mechanicalReview);
   }
+
+  async removeProductFromReview(reviewId: number, productId: number) {
+    const updatedReview =
+      await this.mechanicalReviewRepository.manager.transaction(
+        async (manager) => {
+          const mechanicalReviewRepository =
+            manager.getRepository(MechanicalReview);
+          const productRepository = manager.getRepository(Product);
+
+          const review = await mechanicalReviewRepository.findOne({
+            where: { id: reviewId },
+            relations: ['productsUsed'],
+          });
+
+          if (!review) {
+            throw new BadRequestException('Revisão mecânica não encontrada');
+          }
+
+          const productInReview = (review.productsUsed ?? []).find(
+            (p) => p.id === productId,
+          );
+
+          if (!productInReview) {
+            throw new BadRequestException('Produto não encontrado na revisão');
+          }
+
+          const product = await productRepository.findOne({
+            where: { id: productId },
+          });
+
+          if (!product) {
+            throw new BadRequestException('Produto não encontrado');
+          }
+
+          const qtyToReturn = productInReview.quantityUsed ?? 0;
+
+          // Reverte a quantidade usada para o estoque
+          product.quantity = (product.quantity ?? 0) + qtyToReturn;
+          product.quantityUsed = Math.max(
+            (product.quantityUsed ?? 0) - qtyToReturn,
+            0,
+          );
+
+          await productRepository.save(product);
+
+          // Remove o produto da lista da revisão
+          review.productsUsed = (review.productsUsed ?? []).filter(
+            (p) => p.id !== productId,
+          );
+
+          await mechanicalReviewRepository.save(review);
+
+          return review;
+        },
+      );
+
+    return new ResponseMechanicalDto(updatedReview);
+  }
 }
