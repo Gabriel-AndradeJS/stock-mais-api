@@ -8,11 +8,14 @@ import {
   Post,
   Req,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CreateMechanicalDto } from 'src/mechanical-review/dto/create-mechanical';
 import { UpdateMechanicalDto } from 'src/mechanical-review/dto/update-mechanical';
 import { MechanicalReviewService } from 'src/mechanical-review/mechanical-review.service';
 
+@UseGuards(AuthGuard)
 @Controller('mechanical-review')
 export class MechanicalReviewController {
   constructor(
