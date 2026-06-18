@@ -9,6 +9,8 @@ import { UserService } from 'src/user/user.service';
 import { In, Repository } from 'typeorm';
 import { UpdateMechanicalDto } from 'src/mechanical-review/dto/update-mechanical';
 import { MechanicalStatus } from 'src/common/types/mechanical-status';
+import { StockMovementsService } from 'src/stock-movements/stock-movements.service';
+import { PartMovement } from 'src/common/enums/part-movements';
 
 @Injectable()
 export class MechanicalReviewService {
@@ -16,6 +18,7 @@ export class MechanicalReviewService {
     @InjectRepository(MechanicalReview)
     private readonly mechanicalReviewRepository: Repository<MechanicalReview>,
     private readonly userService: UserService,
+    private readonly stockMovementsService: StockMovementsService,
   ) {}
 
   private groupProductsUsed(productsUsed: ProductUsedDto[] = []) {
@@ -49,6 +52,7 @@ export class MechanicalReviewService {
     productsUsed: ProductUsedDto[] | undefined,
     productRepository: Repository<Product>,
     isUpdate: boolean = false,
+    mechanicName: string = '',
   ) {
     if (!productsUsed?.length) {
       return mechanicalReview.productsUsed ?? [];
@@ -115,6 +119,26 @@ export class MechanicalReviewService {
 
       await productRepository.save(product);
 
+      if (quantityDifference > 0) {
+        await this.stockMovementsService.logProductMovement(
+          productId,
+          product.name,
+          mechanicName,
+          mechanicalReview.id,
+          quantityDifference,
+          PartMovement.OUT,
+        );
+      } else if (quantityDifference < 0) {
+        await this.stockMovementsService.logProductMovement(
+          productId,
+          product.name,
+          mechanicName,
+          mechanicalReview.id,
+          Math.abs(quantityDifference),
+          PartMovement.RETURN,
+        );
+      }
+
       if (reviewProduct) {
         reviewProduct.quantityUsed = newUsedQuantity;
       } else {
@@ -177,6 +201,8 @@ export class MechanicalReviewService {
             savedMechanicalReview,
             productsUsed,
             productRepository,
+            false,
+            mechanicalReviewData.mechanic,
           );
 
           return {
@@ -229,6 +255,7 @@ export class MechanicalReviewService {
             productsUsed,
             productRepository,
             true,
+            mechanicalReview.mechanic,
           );
 
           return {
@@ -292,7 +319,6 @@ export class MechanicalReviewService {
 
           const qtyToReturn = productInReview.quantityUsed ?? 0;
 
-          // Reverte a quantidade usada para o estoque
           product.quantity = (product.quantity ?? 0) + qtyToReturn;
           product.quantityUsed = Math.max(
             (product.quantityUsed ?? 0) - qtyToReturn,
@@ -301,7 +327,15 @@ export class MechanicalReviewService {
 
           await productRepository.save(product);
 
-          // Remove o produto da lista da revisão
+          await this.stockMovementsService.logProductMovement(
+            productId,
+            product.name,
+            review.mechanic,
+            review.id,
+            qtyToReturn,
+            PartMovement.RETURN,
+          );
+
           review.productsUsed = (review.productsUsed ?? []).filter(
             (p) => p.id !== productId,
           );
