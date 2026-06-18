@@ -8,6 +8,7 @@ import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
 import { MechanicalReviewModule } from './mechanical-review/mechanical-review.module';
 import { StockMovementsModule } from './stock-movements/stock-movements.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { StockMovementsModule } from './stock-movements/stock-movements.module';
       synchronize: true,
       entities: [__dirname + '/entities/**/*.entity{.ts,.js}'],
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     BcryptModule,
     AuthModule,
