@@ -7,6 +7,7 @@ import { Product } from 'src/product/entities/product.entity';
 import { UserModule } from 'src/user/user.module';
 import { ProductModule } from 'src/product/product.module';
 import { JwtModule } from 'src/jwt/jwt.module';
+import { StockMovementsModule } from 'src/stock-movements/stock-movements.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { JwtModule } from 'src/jwt/jwt.module';
     UserModule,
     ProductModule,
     JwtModule,
+    StockMovementsModule,
   ],
   controllers: [MechanicalReviewController],
   providers: [MechanicalReviewService],
