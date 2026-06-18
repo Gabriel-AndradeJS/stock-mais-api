@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
 import { MechanicalReviewModule } from './mechanical-review/mechanical-review.module';
+import { StockMovementsModule } from './stock-movements/stock-movements.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MechanicalReviewModule } from './mechanical-review/mechanical-review.mo
     JwtModule,
     ProductModule,
     MechanicalReviewModule,
+    StockMovementsModule,
   ],
   controllers: [],
   providers: [],
