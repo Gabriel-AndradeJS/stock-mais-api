@@ -36,4 +36,8 @@ export class StockMovementsService {
 
     return await this.stockMovementsRepository.save(movement);
   }
+
+  async deleteAllMovements() {
+    await this.stockMovementsRepository.clear();
+  }
 }
