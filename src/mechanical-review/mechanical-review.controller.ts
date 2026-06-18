@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { MechanicalStatus } from 'src/common/types/mechanical-status';
 import { CreateMechanicalDto } from 'src/mechanical-review/dto/create-mechanical';
 import { UpdateMechanicalDto } from 'src/mechanical-review/dto/update-mechanical';
 import { MechanicalReviewService } from 'src/mechanical-review/mechanical-review.service';
@@ -23,8 +25,8 @@ export class MechanicalReviewController {
   ) {}
 
   @Get()
-  getAll(@Req() req: Request) {
-    return this.mechanicalReviewService.getAllMechanicalReviews(req);
+  getAll(@Req() req: Request, @Query('status') status?: MechanicalStatus) {
+    return this.mechanicalReviewService.getAllMechanicalReviews(req, status);
   }
 
   @Get(':id')
