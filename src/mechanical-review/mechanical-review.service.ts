@@ -8,6 +8,7 @@ import { Product } from 'src/product/entities/product.entity';
 import { UserService } from 'src/user/user.service';
 import { In, Repository } from 'typeorm';
 import { UpdateMechanicalDto } from 'src/mechanical-review/dto/update-mechanical';
+import { MechanicalStatus } from 'src/common/types/mechanical-status';
 
 @Injectable()
 export class MechanicalReviewService {
@@ -130,13 +131,17 @@ export class MechanicalReviewService {
     }));
   }
 
-  async getAllMechanicalReviews(req: Request) {
+  async getAllMechanicalReviews(req: Request, status?: MechanicalStatus) {
     const reviews = await this.mechanicalReviewRepository.find({
       where: { userId: req['user']?.sub },
       relations: ['productsUsed'],
     });
 
-    return reviews.map((review) => new ResponseMechanicalDto(review));
+    const filteredReviews = status
+      ? reviews.filter((review) => review.status === status)
+      : reviews;
+
+    return filteredReviews.map((review) => new ResponseMechanicalDto(review));
   }
 
   async createMechanicalReview(
