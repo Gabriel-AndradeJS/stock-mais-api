@@ -10,5 +10,6 @@ import { UserModule } from 'src/user/user.module';
   imports: [JwtModule, TypeOrmModule.forFeature([Product]), UserModule],
   controllers: [ProductController],
   providers: [ProductService],
+  exports: [ProductService],
 })
 export class ProductModule {}

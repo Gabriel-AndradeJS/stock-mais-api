@@ -6,6 +6,7 @@ import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
+import { MechanicalReviewModule } from './mechanical-review/mechanical-review.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     JwtModule,
     ProductModule,
+    MechanicalReviewModule,
   ],
   controllers: [],
   providers: [],
