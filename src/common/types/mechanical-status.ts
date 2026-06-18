@@ -1,4 +1,5 @@
 export enum MechanicalStatus {
-  completed = 'Concluído',
-  in_progress = 'Em andamento',
+  COMPLETED = 'concluido',
+  IN_PROGRESS = 'em andamento',
+  PENDING = 'pendente',
 }
