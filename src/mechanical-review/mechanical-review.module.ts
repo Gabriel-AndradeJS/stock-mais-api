@@ -6,12 +6,14 @@ import { MechanicalReview } from 'src/mechanical-review/entities/mechanical-revi
 import { Product } from 'src/product/entities/product.entity';
 import { UserModule } from 'src/user/user.module';
 import { ProductModule } from 'src/product/product.module';
+import { JwtModule } from 'src/jwt/jwt.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MechanicalReview, Product]),
     UserModule,
     ProductModule,
+    JwtModule,
   ],
   controllers: [MechanicalReviewController],
   providers: [MechanicalReviewService],
