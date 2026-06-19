@@ -5,13 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Sales } from './entities/sales.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { JwtModule } from 'src/jwt/jwt.module';
-import { ProductModule } from 'src/product/product.module';
+import { StockMovementsModule } from 'src/stock-movements/stock-movements.module';
 
 @Module({
   imports: [
     JwtModule,
     TypeOrmModule.forFeature([Sales, Product]),
-    ProductModule,
+    StockMovementsModule,
   ],
   controllers: [SalesController],
   providers: [SalesService],
