@@ -10,6 +10,7 @@ import { MechanicalReviewModule } from './mechanical-review/mechanical-review.mo
 import { StockMovementsModule } from './stock-movements/stock-movements.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SalesModule } from './sales/sales.module';
+import { BudgetModule } from './budget/budget.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SalesModule } from './sales/sales.module';
     MechanicalReviewModule,
     StockMovementsModule,
     SalesModule,
+    BudgetModule,
   ],
   controllers: [],
   providers: [],
