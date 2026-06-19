@@ -21,7 +21,7 @@ export class StockMovements {
   mechanicName: string;
 
   @Column()
-  mechanicalReviewId: number;
+  mechanicalReviewId?: number;
 
   @Column('int')
   quantity: number;
