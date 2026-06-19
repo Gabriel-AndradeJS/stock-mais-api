@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import { PartMovement } from 'src/common/enums/part-movements';
 import {
   Column,
@@ -20,8 +21,8 @@ export class StockMovements {
   @Column()
   mechanicName: string;
 
-  @Column()
-  mechanicalReviewId?: number;
+  @Column({ nullable: true })
+  mechanicalReviewId: number;
 
   @Column('int')
   quantity: number;
