@@ -9,6 +9,7 @@ import { ProductModule } from './product/product.module';
 import { MechanicalReviewModule } from './mechanical-review/mechanical-review.module';
 import { StockMovementsModule } from './stock-movements/stock-movements.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ProductModule,
     MechanicalReviewModule,
     StockMovementsModule,
+    SalesModule,
   ],
   controllers: [],
   providers: [],
