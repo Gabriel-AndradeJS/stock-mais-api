@@ -1,19 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { Sales } from './entities/sales.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { ProductService } from 'src/product/product.service';
+import { StockMovementsService } from 'src/stock-movements/stock-movements.service';
+import { PartMovement } from 'src/common/enums/part-movements';
 
 @Injectable()
 export class SalesService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    private readonly productService: ProductService,
     @InjectRepository(Sales)
     private readonly salesRepository: Repository<Sales>,
+    private readonly stockMovementsService: StockMovementsService,
   ) {}
 
   async createSale(createSaleDto: CreateSaleDto) {
@@ -43,6 +44,14 @@ export class SalesService {
       unitPrice,
       totalPrice,
     });
+    this.stockMovementsService.logProductMovement(
+      productId,
+      product.name,
+      'Venda',
+      0,
+      quantity || 1,
+      PartMovement.SALE,
+    );
     return this.salesRepository.save(sale);
   }
 }
