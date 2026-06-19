@@ -4,7 +4,7 @@ import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { ResponseProductDto } from 'src/product/dto/response-product.dto';
 import { Product } from 'src/product/entities/product.entity';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -102,5 +102,9 @@ export class ProductService {
 
   async findById(id: number) {
     return this.productRepository.findOne({ where: { id } });
+  }
+
+  async findByIds(ids: number[]) {
+    return this.productRepository.find({ where: { id: In(ids) } });
   }
 }
