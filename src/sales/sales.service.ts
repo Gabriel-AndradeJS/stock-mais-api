@@ -17,6 +17,10 @@ export class SalesService {
     private readonly stockMovementsService: StockMovementsService,
   ) {}
 
+  async getAllSales() {
+    return this.salesRepository.find();
+  }
+
   async createSale(createSaleDto: CreateSaleDto) {
     const { productId, quantity } = createSaleDto;
 
@@ -47,7 +51,7 @@ export class SalesService {
     this.stockMovementsService.logProductMovement(
       productId,
       product.name,
-      'Venda',
+      '',
       0,
       quantity || 1,
       PartMovement.SALE,
