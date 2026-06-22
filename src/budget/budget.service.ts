@@ -67,7 +67,6 @@ export class BudgetService {
 
     const budget = this.budgetRepository.create({
       name,
-      products,
       items: budgetItems,
       quantityProducts,
       totalAmount,
