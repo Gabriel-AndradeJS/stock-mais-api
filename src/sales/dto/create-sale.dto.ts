@@ -1,19 +1,11 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateSaleItemDto } from './create-sale-item.dto';
 
 export class CreateSaleDto {
-  @IsInt()
-  productId: number;
-
-  @IsOptional()
-  @IsString()
-  barcode?: string;
-
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  quantity?: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateSaleItemDto)
+  products: CreateSaleItemDto[];
 }
